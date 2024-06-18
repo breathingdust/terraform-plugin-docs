@@ -529,10 +529,11 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 		case "data-sources/":
 			resSchema, resName := resourceSchema(providerSchema.DataSourceSchemas, shortName, relFile)
 			exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "data-sources", resName, "data-source.tf")
+			metadataFilePath := filepath.Join(g.ProviderExamplesDir(), "data-sources", resName, "metadata.json")
 
 			if resSchema != nil {
 				tmpl := resourceTemplate(tmplData)
-				render, err := tmpl.Render(g.providerDir, resName, g.providerName, g.renderedProviderName, "Data Source", exampleFilePath, "", "", resSchema)
+				render, err := tmpl.Render(g.providerDir, resName, g.providerName, g.renderedProviderName, "Data Source", exampleFilePath, "", metadataFilePath, resSchema)
 				if err != nil {
 					return fmt.Errorf("unable to render data source template %q: %w", rel, err)
 				}
@@ -566,9 +567,10 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 			funcName := removeAllExt(relFile)
 			if signature, ok := providerSchema.Functions[funcName]; ok {
 				exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "functions", funcName, "function.tf")
+				metadataFilePath := filepath.Join(g.ProviderExamplesDir(), "functions", funcName, "metadata.json")
 
 				tmpl := functionTemplate(tmplData)
-				render, err := tmpl.Render(g.providerDir, funcName, g.providerName, g.renderedProviderName, "function", exampleFilePath, signature)
+				render, err := tmpl.Render(g.providerDir, funcName, g.providerName, g.renderedProviderName, "function", exampleFilePath, metadataFilePath, signature)
 				if err != nil {
 					return fmt.Errorf("unable to render function template %q: %w", rel, err)
 				}

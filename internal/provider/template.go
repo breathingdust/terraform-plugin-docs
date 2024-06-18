@@ -89,6 +89,23 @@ func terraformCodeFile(providerDir string) func(string) (string, error) {
 	}
 }
 
+func loadMetadata(metadataFile string) (map[string]string, error) {
+	if !fileExists(metadataFile) {
+		return map[string]string{}, nil
+	}
+	content, err := os.ReadFile(metadataFile)
+	if err != nil {
+		return nil, fmt.Errorf("unable to read content from metadata file %q: %w", metadataFile, err)
+	}
+
+	var metadata map[string]string
+
+	if err := json.Unmarshal(content, &metadata); err != nil {
+		log.Fatalf("failed to unmarshal: %v", err)
+	}
+	return metadata, nil
+}
+
 func renderTemplate(providerDir, name string, text string, out io.Writer, data interface{}) error {
 	tmpl, err := newTemplate(providerDir, name, text)
 	if err != nil {
@@ -189,16 +206,16 @@ func (t resourceTemplate) Render(providerDir, name, providerName, renderedProvid
 		HasImport  bool
 		ImportFile string
 
-		HasMetadata  bool
-		MetadataFile string
-		Metadata     map[string]string
-
 		ProviderName      string
 		ProviderShortName string
 
 		SchemaMarkdown string
 
 		RenderedProviderName string
+
+		HasMetadata  bool
+		MetadataFile string
+		Metadata     map[string]string
 	}{
 		Type:        typeName,
 		Name:        name,
@@ -210,37 +227,20 @@ func (t resourceTemplate) Render(providerDir, name, providerName, renderedProvid
 		HasImport:  importFile != "" && fileExists(importFile),
 		ImportFile: importFile,
 
-		HasMetadata:  metadataFile != "" && fileExists(metadataFile),
-		MetadataFile: metadataFile,
-		Metadata:     metadata,
-
 		ProviderName:      providerName,
 		ProviderShortName: providerShortName(providerName),
 
 		SchemaMarkdown: schemaComment + "\n" + schemaBuffer.String(),
 
 		RenderedProviderName: renderedProviderName,
+
+		HasMetadata:  metadataFile != "" && fileExists(metadataFile),
+		MetadataFile: metadataFile,
+		Metadata:     metadata,
 	})
 }
 
-func loadMetadata(metadataFile string) (map[string]string, error) {
-	if !fileExists(metadataFile) {
-		return map[string]string{}, nil
-	}
-	content, err := os.ReadFile(metadataFile)
-	if err != nil {
-		return nil, fmt.Errorf("unable to read content from metadata file %q: %w", metadataFile, err)
-	}
-
-	var metadata map[string]string
-
-	if err := json.Unmarshal(content, &metadata); err != nil {
-		log.Fatalf("failed to unmarshal: %v", err)
-	}
-	return metadata, nil
-}
-
-func (t functionTemplate) Render(providerDir, name, providerName, renderedProviderName, typeName, exampleFile string, signature *tfjson.FunctionSignature) (string, error) {
+func (t functionTemplate) Render(providerDir, name, providerName, renderedProviderName, typeName, exampleFile, metadataFile string, signature *tfjson.FunctionSignature) (string, error) {
 	funcSig, err := functionmd.RenderSignature(name, signature)
 	if err != nil {
 		return "", fmt.Errorf("unable to render function signature: %w", err)
@@ -259,6 +259,11 @@ func (t functionTemplate) Render(providerDir, name, providerName, renderedProvid
 	s := string(t)
 	if s == "" {
 		return "", nil
+	}
+
+	metadata, err := loadMetadata(metadataFile)
+	if err != nil {
+		return "", fmt.Errorf("unable to load metadata: %w", err)
 	}
 
 	return renderStringTemplate(providerDir, "resourceTemplate", s, struct {
@@ -280,6 +285,10 @@ func (t functionTemplate) Render(providerDir, name, providerName, renderedProvid
 		FunctionVariadicArgumentMarkdown string
 
 		RenderedProviderName string
+
+		HasMetadata  bool
+		MetadataFile string
+		Metadata     map[string]string
 	}{
 		Type:        typeName,
 		Name:        name,
@@ -299,6 +308,10 @@ func (t functionTemplate) Render(providerDir, name, providerName, renderedProvid
 		FunctionVariadicArgumentMarkdown: variadicComment + "\n" + funcVarArg,
 
 		RenderedProviderName: renderedProviderName,
+
+		HasMetadata:  metadataFile != "" && fileExists(metadataFile),
+		MetadataFile: metadataFile,
+		Metadata:     metadata,
 	})
 }
 

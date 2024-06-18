@@ -41,6 +41,9 @@ Description: Example data source
 HasExample: true
 ExampleFile: $WORK/examples/data-sources/scaffolding_example/data-source.tf
 HasImport: false
+HasMetadata: true
+MetadataFile: $WORK/examples/data-sources/scaffolding_example/metadata.json
+Metadata: datasourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -97,6 +100,9 @@ Description: Given a string value, returns the same value.
 Summary: Echo a string
 HasExample: true
 ExampleFile: $WORK/examples/functions/example/function.tf
+HasMetadata: true
+MetadataFile: $WORK/examples/functions/example/metadata.json
+Metadata: functionvalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -190,7 +196,7 @@ HasImport: true
 ImportFile: $WORK/examples/resources/scaffolding_example/import.sh
 HasMetadata: true
 MetadataFile: $WORK/examples/resources/scaffolding_example/metadata.json
-Metadata: value
+Metadata: resourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -258,6 +264,9 @@ Description: {{.Description}}
 HasExample: {{.HasExample}}
 ExampleFile: {{.ExampleFile}}
 HasImport: {{.HasImport}}
+HasMetadata: {{.HasMetadata}}
+MetadataFile: {{.MetadataFile}}
+Metadata: {{ index .Metadata "key"}}
 ProviderName: {{.ProviderName}}
 ProviderShortName: {{.ProviderShortName}}
 RenderedProviderName: {{.RenderedProviderName}}
@@ -351,6 +360,9 @@ Description: {{.Description}}
 Summary: {{.Summary}}
 HasExample: {{.HasExample}}
 ExampleFile: {{.ExampleFile}}
+HasMetadata: {{.HasMetadata}}
+MetadataFile: {{.MetadataFile}}
+Metadata: {{ index .Metadata "key"}}
 ProviderName: {{.ProviderName}}
 ProviderShortName: {{.ProviderShortName}}
 RenderedProviderName: {{.RenderedProviderName}}
@@ -475,7 +487,15 @@ resource "scaffolding_example" "example" {
 terraform import scaffolding_example.example
 -- examples/resources/scaffolding_example/metadata.json --
 {
-  "key": "value"
+  "key": "resourcevalue"
+}
+-- examples/data-sources/scaffolding_example/metadata.json --
+{
+  "key": "datasourcevalue"
+}
+-- examples/functions/example/metadata.json --
+{
+  "key": "functionvalue"
 }
 -- schema.json --
 {

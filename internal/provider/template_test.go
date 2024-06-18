@@ -21,6 +21,7 @@ Trimspace: {{ trimspace .Text }}
 Lower: {{ upper .Text }}
 Upper: {{ lower .Text }}
 Title: {{ title .Text }}
+Metadata: {{ index .Metadata "key"  }}
 Prefixlines:
 {{ prefixlines "  " .MultiLineTest }}
 Printf tffile: {{ printf "{{tffile %q}}" .Code }}
@@ -34,6 +35,7 @@ Trimspace: my Odly cAsed striNg
 Lower: MY ODLY CASED STRING
 Upper: my odly cased string
 Title: My Odly Cased String
+Metadata: value
 Prefixlines:
   This text used
   multiple lines
@@ -42,25 +44,30 @@ tffile: terraform
 provider "scaffolding" {
   # example configuration here
 }
-
 `
 	result, err := renderStringTemplate("testdata/test-provider-dir", "testTemplate", template, struct {
 		Text          string
 		MultiLineTest string
 		Code          string
+		Metadata      map[string]string
 	}{
 		Text: "my Odly cAsed striNg",
 		MultiLineTest: `This text used
 multiple lines`,
-		Code: "provider.tf",
+		Code:     "provider.tf",
+		Metadata: map[string]string{"key": "value"},
 	})
 
 	if err != nil {
 		t.Error(err)
 	}
 	cleanedResult := strings.ReplaceAll(result, "```", "")
-	if !cmp.Equal(expectedString, cleanedResult) {
-		t.Errorf("expected: %+v, got: %+v", expectedString, cleanedResult)
+	// if !cmp.Equal(expectedString, cleanedResult) {
+	// 	t.Errorf("expected: %+v, got: %+v", expectedString, cleanedResult)
+	// }
+
+	if diff := cmp.Diff(expectedString, cleanedResult); diff != "" {
+		t.Errorf("MakeGatewayInfo() mismatch (-want +got):\n%s", diff)
 	}
 }
 
@@ -93,7 +100,7 @@ provider "scaffolding" {
 		},
 	}
 
-	result, err := tpl.Render("testdata/test-provider-dir", "testTemplate", "test-provider", "test-provider", "Resource", "provider.tf", "provider.tf", &schema)
+	result, err := tpl.Render("testdata/test-provider-dir", "testTemplate", "test-provider", "test-provider", "Resource", "provider.tf", "provider.tf", "", &schema)
 	if err != nil {
 		t.Error(err)
 	}

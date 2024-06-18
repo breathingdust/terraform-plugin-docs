@@ -173,7 +173,7 @@ func (t resourceTemplate) Render(providerDir, name, providerName, renderedProvid
 		return "", nil
 	}
 
-	metadata, err := loadMetadata(providerDir)
+	metadata, err := loadMetadata(metadataFile)
 	if err != nil {
 		return "", fmt.Errorf("unable to load metadata: %w", err)
 	}
@@ -318,12 +318,6 @@ description: |-
 ## Example Usage
 
 {{tffile .ExampleFile }}
-{{- end }}
-
-{{ if .HasMetadata -}}
-## Example Usage
-
-{{index .Metadata "key"}}
 {{- end }}
 
 {{ .SchemaMarkdown | trimspace }}

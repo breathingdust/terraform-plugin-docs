@@ -188,6 +188,8 @@ HasExample: true
 ExampleFile: $WORK/examples/resources/scaffolding_example/resource.tf
 HasImport: true
 ImportFile: $WORK/examples/resources/scaffolding_example/import.sh
+HasMetadata: true
+MetadataFile: $WORK/examples/resources/scaffolding_example/metadata.json
 Metadata: value
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
@@ -392,6 +394,8 @@ HasExample: {{.HasExample}}
 ExampleFile: {{.ExampleFile}}
 HasImport: {{.HasImport}}
 ImportFile: {{.ImportFile}}
+HasMetadata: {{.HasMetadata}}
+MetadataFile: {{.MetadataFile}}
 Metadata: {{ index .Metadata "key"}}
 ProviderName: {{.ProviderName}}
 ProviderShortName: {{.ProviderShortName}}

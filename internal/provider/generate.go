@@ -547,7 +547,7 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 			resSchema, resName := resourceSchema(providerSchema.ResourceSchemas, shortName, relFile)
 			exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "resource.tf")
 			importFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "import.sh")
-			metadataFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "metadata")
+			metadataFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "metadata.json")
 
 			if resSchema != nil {
 				tmpl := resourceTemplate(tmplData)

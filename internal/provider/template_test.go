@@ -44,6 +44,7 @@ tffile: terraform
 provider "scaffolding" {
   # example configuration here
 }
+
 `
 	result, err := renderStringTemplate("testdata/test-provider-dir", "testTemplate", template, struct {
 		Text          string
@@ -62,12 +63,8 @@ multiple lines`,
 		t.Error(err)
 	}
 	cleanedResult := strings.ReplaceAll(result, "```", "")
-	// if !cmp.Equal(expectedString, cleanedResult) {
-	// 	t.Errorf("expected: %+v, got: %+v", expectedString, cleanedResult)
-	// }
-
-	if diff := cmp.Diff(expectedString, cleanedResult); diff != "" {
-		t.Errorf("MakeGatewayInfo() mismatch (-want +got):\n%s", diff)
+	if !cmp.Equal(expectedString, cleanedResult) {
+		t.Errorf("expected: %+v, got: %+v", expectedString, cleanedResult)
 	}
 }
 

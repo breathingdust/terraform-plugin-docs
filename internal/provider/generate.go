@@ -529,7 +529,7 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 		case "data-sources/":
 			resSchema, resName := resourceSchema(providerSchema.DataSourceSchemas, shortName, relFile)
 			exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "data-sources", resName, "data-source.tf")
-			metadataFilePath := filepath.Join(g.ProviderExamplesDir(), "data-sources", resName, "metadata.json")
+			metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), resName+"_data_metadata.json")
 
 			if resSchema != nil {
 				tmpl := resourceTemplate(tmplData)
@@ -548,7 +548,7 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 			resSchema, resName := resourceSchema(providerSchema.ResourceSchemas, shortName, relFile)
 			exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "resource.tf")
 			importFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "import.sh")
-			metadataFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "metadata.json")
+			metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), resName+"_metadata.json")
 
 			if resSchema != nil {
 				tmpl := resourceTemplate(tmplData)
@@ -567,7 +567,7 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 			funcName := removeAllExt(relFile)
 			if signature, ok := providerSchema.Functions[funcName]; ok {
 				exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "functions", funcName, "function.tf")
-				metadataFilePath := filepath.Join(g.ProviderExamplesDir(), "functions", funcName, "metadata.json")
+				metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), funcName+"_function_metadata.json")
 
 				tmpl := functionTemplate(tmplData)
 				render, err := tmpl.Render(g.providerDir, funcName, g.providerName, g.renderedProviderName, "function", exampleFilePath, metadataFilePath, signature)

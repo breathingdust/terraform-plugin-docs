@@ -34,6 +34,8 @@ rendering templated website to static markdown
 rendering "data-sources/example.md.tmpl"
 rendering "index.md.tmpl"
 rendering "resources/example.md.tmpl"
+copying non-template file: "scaffolding_example_data_metadata.json"
+copying non-template file: "scaffolding_example_metadata.json"
 -- expected-datasource.md --
 # Data Fields
 
@@ -44,7 +46,7 @@ HasExample: true
 ExampleFile: $WORK/examples/data-sources/scaffolding_example/data-source.tf
 HasImport: false
 HasMetadata: true
-MetadataFile: $WORK/examples/data-sources/scaffolding_example/metadata.json
+MetadataFile: $WORK/templates/scaffolding_example_data_metadata.json
 Metadata: datasourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
@@ -147,8 +149,8 @@ ExampleFile: $WORK/examples/resources/scaffolding_example/resource.tf
 HasImport: true
 ImportFile: $WORK/examples/resources/scaffolding_example/import.sh
 HasMetadata: true
-MetadataFile: $WORK/examples/resources/scaffolding_example/metadata.json
-Metadata: datasourcevalue
+MetadataFile: $WORK/templates/scaffolding_example_metadata.json
+Metadata: resourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -388,11 +390,11 @@ resource "scaffolding_example" "example" {
 }
 -- examples/resources/scaffolding_example/import.sh --
 terraform import scaffolding_example.example
--- examples/resources/scaffolding_example/metadata.json --
+-- templates/scaffolding_example_metadata.json --
 {
   "key": "resourcevalue"
 }
--- examples/data-sources/scaffolding_example/metadata.json --
+-- templates/scaffolding_example_data_metadata.json --
 {
   "key": "datasourcevalue"
 }

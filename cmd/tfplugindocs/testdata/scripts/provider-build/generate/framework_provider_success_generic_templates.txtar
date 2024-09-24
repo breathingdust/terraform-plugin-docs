@@ -34,8 +34,6 @@ rendering templated website to static markdown
 rendering "data-sources/example.md.tmpl"
 rendering "index.md.tmpl"
 rendering "resources/example.md.tmpl"
-copying non-template file: "scaffolding_example_data_metadata.json"
-copying non-template file: "scaffolding_example_metadata.json"
 -- expected-datasource.md --
 # Data Fields
 

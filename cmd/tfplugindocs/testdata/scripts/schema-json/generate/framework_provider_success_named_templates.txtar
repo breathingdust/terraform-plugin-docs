@@ -42,7 +42,7 @@ HasExample: true
 ExampleFile: $WORK/examples/data-sources/scaffolding_example/data-source.tf
 HasImport: false
 HasMetadata: true
-MetadataFile: $WORK/examples/data-sources/scaffolding_example/metadata.json
+MetadataFile: $WORK/templates/data-sources/example_data_source_gen_metadata.json
 Metadata: datasourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
@@ -101,7 +101,7 @@ Summary: Echo a string
 HasExample: true
 ExampleFile: $WORK/examples/functions/example/function.tf
 HasMetadata: true
-MetadataFile: $WORK/examples/functions/example/metadata.json
+MetadataFile: $WORK/templates/functions/example_function_gen_metadata.json
 Metadata: functionvalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
@@ -195,7 +195,7 @@ ExampleFile: $WORK/examples/resources/scaffolding_example/resource.tf
 HasImport: true
 ImportFile: $WORK/examples/resources/scaffolding_example/import.sh
 HasMetadata: true
-MetadataFile: $WORK/examples/resources/scaffolding_example/metadata.json
+MetadataFile: $WORK/templates/resources/example_resource_gen_metadata.json
 Metadata: resourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
@@ -485,15 +485,15 @@ resource "scaffolding_example" "example" {
 }
 -- examples/resources/scaffolding_example/import.sh --
 terraform import scaffolding_example.example
--- examples/resources/scaffolding_example/metadata.json --
+-- templates/resources/example_resource_gen_metadata.json --
 {
   "key": "resourcevalue"
 }
--- examples/data-sources/scaffolding_example/metadata.json --
+-- templates/data-sources/example_data_source_gen_metadata.json --
 {
   "key": "datasourcevalue"
 }
--- examples/functions/example/metadata.json --
+-- templates/functions/example_function_gen_metadata.json --
 {
   "key": "functionvalue"
 }

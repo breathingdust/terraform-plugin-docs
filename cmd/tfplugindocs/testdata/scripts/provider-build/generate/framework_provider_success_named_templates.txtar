@@ -32,6 +32,7 @@ rendering static website
 cleaning rendered website dir
 rendering templated website to static markdown
 rendering "data-sources/example.md.tmpl"
+metadataFilePath $WORK/templates/data-sources/example_data_source_gen_metadata.json
 rendering "index.md.tmpl"
 rendering "resources/example.md.tmpl"
 -- expected-datasource.md --
@@ -42,7 +43,10 @@ Type: Data Source
 Description: Example data source
 HasExample: true
 ExampleFile: $WORK/examples/data-sources/scaffolding_example/data-source.tf
-HasImport: false
+HasMetadata: true
+MetadataFile: $WORK/templates/data-sources/example_data_source_gen_metadata.json
+Metadata: datasourcevalue
+Metadata:
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -210,6 +214,9 @@ Description: {{.Description}}
 HasExample: {{.HasExample}}
 ExampleFile: {{.ExampleFile}}
 HasImport: {{.HasImport}}
+HasMetadata: {{.HasMetadata}}
+MetadataFile: {{.MetadataFile}}
+Metadata: {{ index .Metadata "key"}}
 ProviderName: {{.ProviderName}}
 ProviderShortName: {{.ProviderShortName}}
 RenderedProviderName: {{.RenderedProviderName}}
@@ -376,6 +383,14 @@ resource "scaffolding_example" "example" {
 }
 -- examples/resources/scaffolding_example/import.sh --
 terraform import scaffolding_example.example
+-- templates/resources/example_resource_gen_metadata.json --
+{
+  "key": "resourcevalue"
+}
+-- templates/data-sources/example_data_source_gen_metadata.json --
+{
+  "key": "datasourcevalue"
+}
 -- internal/provider/example_data_source.go --
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0

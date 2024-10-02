@@ -21,6 +21,7 @@ Trimspace: {{ trimspace .Text }}
 Lower: {{ upper .Text }}
 Upper: {{ lower .Text }}
 Title: {{ title .Text }}
+Metadata: {{ index .Metadata "key"  }}
 Prefixlines:
 {{ prefixlines "  " .MultiLineTest }}
 Printf tffile: {{ printf "{{tffile %q}}" .Code }}
@@ -34,6 +35,7 @@ Trimspace: my Odly cAsed striNg
 Lower: MY ODLY CASED STRING
 Upper: my odly cased string
 Title: My Odly Cased String
+Metadata: value
 Prefixlines:
   This text used
   multiple lines
@@ -48,11 +50,13 @@ provider "scaffolding" {
 		Text          string
 		MultiLineTest string
 		Code          string
+		Metadata      map[string]string
 	}{
 		Text: "my Odly cAsed striNg",
 		MultiLineTest: `This text used
 multiple lines`,
-		Code: "provider.tf",
+		Code:     "provider.tf",
+		Metadata: map[string]string{"key": "value"},
 	})
 
 	if err != nil {
@@ -93,7 +97,7 @@ provider "scaffolding" {
 		},
 	}
 
-	result, err := tpl.Render("testdata/test-provider-dir", "testTemplate", "test-provider", "test-provider", "Resource", "provider.tf", "provider.tf", &schema)
+	result, err := tpl.Render("testdata/test-provider-dir", "testTemplate", "test-provider", "test-provider", "Resource", "provider.tf", "provider.tf", "", &schema)
 	if err != nil {
 		t.Error(err)
 	}

@@ -41,6 +41,9 @@ Description: Example data source
 HasExample: true
 ExampleFile: $WORK/examples/data-sources/scaffolding_example/data-source.tf
 HasImport: false
+HasMetadata: true
+MetadataFile: $WORK/templates/data-sources/metadata/example_gen.json
+Metadata: datasourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -97,6 +100,9 @@ Description: Given a string value, returns the same value.
 Summary: Echo a string
 HasExample: true
 ExampleFile: $WORK/examples/functions/example/function.tf
+HasMetadata: true
+MetadataFile: $WORK/templates/functions/metadata/example_gen.json
+Metadata: functionvalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -188,6 +194,9 @@ HasExample: true
 ExampleFile: $WORK/examples/resources/scaffolding_example/resource.tf
 HasImport: true
 ImportFile: $WORK/examples/resources/scaffolding_example/import.sh
+HasMetadata: true
+MetadataFile: $WORK/templates/resources/metadata/example_gen.json
+Metadata: resourcevalue
 ProviderName: terraform-provider-scaffolding
 ProviderShortName: scaffolding
 RenderedProviderName: terraform-provider-scaffolding
@@ -255,6 +264,9 @@ Description: {{.Description}}
 HasExample: {{.HasExample}}
 ExampleFile: {{.ExampleFile}}
 HasImport: {{.HasImport}}
+HasMetadata: {{.HasMetadata}}
+MetadataFile: {{.MetadataFile}}
+Metadata: {{ index .Metadata "key"}}
 ProviderName: {{.ProviderName}}
 ProviderShortName: {{.ProviderShortName}}
 RenderedProviderName: {{.RenderedProviderName}}
@@ -348,6 +360,9 @@ Description: {{.Description}}
 Summary: {{.Summary}}
 HasExample: {{.HasExample}}
 ExampleFile: {{.ExampleFile}}
+HasMetadata: {{.HasMetadata}}
+MetadataFile: {{.MetadataFile}}
+Metadata: {{ index .Metadata "key"}}
 ProviderName: {{.ProviderName}}
 ProviderShortName: {{.ProviderShortName}}
 RenderedProviderName: {{.RenderedProviderName}}
@@ -391,6 +406,9 @@ HasExample: {{.HasExample}}
 ExampleFile: {{.ExampleFile}}
 HasImport: {{.HasImport}}
 ImportFile: {{.ImportFile}}
+HasMetadata: {{.HasMetadata}}
+MetadataFile: {{.MetadataFile}}
+Metadata: {{ index .Metadata "key"}}
 ProviderName: {{.ProviderName}}
 ProviderShortName: {{.ProviderShortName}}
 RenderedProviderName: {{.RenderedProviderName}}
@@ -467,6 +485,18 @@ resource "scaffolding_example" "example" {
 }
 -- examples/resources/scaffolding_example/import.sh --
 terraform import scaffolding_example.example
+-- templates/resources/metadata/example_gen.json --
+{
+  "key": "resourcevalue"
+}
+-- templates/data-sources/metadata/example_gen.json --
+{
+  "key": "datasourcevalue"
+}
+-- templates/functions/metadata/example_gen.json --
+{
+  "key": "functionvalue"
+}
 -- schema.json --
 {
   "format_version": "1.0",

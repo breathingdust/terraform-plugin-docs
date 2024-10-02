@@ -534,10 +534,7 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 		case "data-sources/":
 			resSchema, resName := resourceSchema(providerSchema.DataSourceSchemas, shortName, relFile)
 			exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "data-sources", resName, "data-source.tf")
-			metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), "data-sources", strings.TrimPrefix(resName, shortName+"_")+"_data_source_gen_metadata.json")
-
-			//             metadataFilePath $WORK/templates/data-sources/example_data_source_gen_metadata.json
-			//g.infof("metadataFilePath %s", metadataFilePath)
+			metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), "data-sources", "metadata", strings.TrimPrefix(resName, shortName+"_")+"_gen.json")
 
 			if resSchema != nil {
 				tmpl := resourceTemplate(tmplData)
@@ -556,7 +553,7 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 			resSchema, resName := resourceSchema(providerSchema.ResourceSchemas, shortName, relFile)
 			exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "resource.tf")
 			importFilePath := filepath.Join(g.ProviderExamplesDir(), "resources", resName, "import.sh")
-			metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), "resources", strings.TrimPrefix(resName, shortName+"_")+"_resource_gen_metadata.json")
+			metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), "resources", "metadata", strings.TrimPrefix(resName, shortName+"_")+"_gen.json")
 
 			if resSchema != nil {
 				tmpl := resourceTemplate(tmplData)
@@ -575,7 +572,7 @@ func (g *generator) renderStaticWebsite(providerSchema *tfjson.ProviderSchema) e
 			funcName := removeAllExt(relFile)
 			if signature, ok := providerSchema.Functions[funcName]; ok {
 				exampleFilePath := filepath.Join(g.ProviderExamplesDir(), "functions", funcName, "function.tf")
-				metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), "functions", strings.TrimPrefix(funcName, shortName+"_")+"_function_gen_metadata.json")
+				metadataFilePath := filepath.Join(g.ProviderTemplatesDir(), "functions", "metadata", strings.TrimPrefix(funcName, shortName+"_")+"_gen.json")
 
 				tmpl := functionTemplate(tmplData)
 				render, err := tmpl.Render(g.providerDir, funcName, g.providerName, g.renderedProviderName, "function", exampleFilePath, metadataFilePath, signature)
